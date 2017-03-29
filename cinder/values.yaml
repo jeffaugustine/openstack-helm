@@ -45,6 +45,18 @@ upgrades:
     max_unavailable: 1
     max_surge: 3
 
+bootstrap:
+  enabled: true
+  volumes:
+    ceph:
+      name: "ceph"
+      group: "cinder-ceph"
+      driver: "cinder.volume.driver.RBDDriver"
+    lvm:
+      name: "lvm"
+      group: "cinder-lvm"
+      driver: "cinder.volume.drivers.lvm.LVMVolumeDriver"
+
 keystone:
   admin_user: "admin"
   admin_user_domain: "default"
@@ -128,6 +140,10 @@ dependencies:
     - cinder-ks-service
     service:
     - keystone-api
+  bootstrap:
+    service:
+    - keystone-api
+    - cinder-api
   api:
     jobs:
     - cinder-db-sync
@@ -252,6 +268,13 @@ resources:
       memory: "1024Mi"
       cpu: "2000m"
   cinder_ks_user:
+    requests:
+      memory: "124Mi"
+      cpu: "100m"
+    limits:
+      memory: "1024Mi"
+      cpu: "2000m"
+  bootstrap:
     requests:
       memory: "124Mi"
       cpu: "100m"

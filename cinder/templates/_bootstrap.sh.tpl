@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Copyright 2017 The Openstack-Helm Authors.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +14,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cinder-bin
-data:
-  db-init.sh: |+
-{{ tuple "bin/_db-init.sh.tpl" . | include "helm-toolkit.template" | indent 4 }}
-  ks-service.sh: |+
-{{- include "helm-toolkit.keystone_service" . | indent 4 }}
-  ks-endpoints.sh: |+
-{{- include "helm-toolkit.keystone_endpoints" . | indent 4 }}
-  ks-user.sh: |+
-{{- include "helm-toolkit.keystone_user" . | indent 4 }}
-  bootstrap.sh: |+
-{{ tuple "bin/_bootstrap.sh.tpl" . | include "helm-toolkit.template" | indent 4 }}
+set -ex
+export HOME=/tmp
+
+{{ if .Values.bootstrap.enabled }}
+
+{{ range .Values.bootstrap.volumes }}
+openstack volume type show {{ .group }} || \
+  openstack volume type create \
+    --public \
+    --property volume_driver= {{ .driver }} \
+      volume_backend_name= {{ .name }} \
+{{ .group }}
+
+exit 0
