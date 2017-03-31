@@ -34,6 +34,7 @@ images:
   db_init: quay.io/stackanetes/stackanetes-kolla-toolbox:newton
   db_sync: quay.io/stackanetes/stackanetes-cinder-api:newton
   api: quay.io/stackanetes/stackanetes-cinder-api:newton
+  bootstrap: quay.io/stackanetes/stackanetes-cinder-api:newton
   scheduler: quay.io/stackanetes/stackanetes-cinder-scheduler:newton
   volume: quay.io/stackanetes/stackanetes-cinder-volume:newton
   pull_policy: "IfNotPresent"
@@ -52,10 +53,6 @@ bootstrap:
       name: "ceph"
       group: "cinder-ceph"
       driver: "cinder.volume.driver.RBDDriver"
-    lvm:
-      name: "lvm"
-      group: "cinder-lvm"
-      driver: "cinder.volume.drivers.lvm.LVMVolumeDriver"
 
 keystone:
   admin_user: "admin"

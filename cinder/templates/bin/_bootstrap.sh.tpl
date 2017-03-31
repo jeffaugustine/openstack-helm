@@ -23,8 +23,11 @@ export HOME=/tmp
 openstack volume type show {{ .group }} || \
   openstack volume type create \
     --public \
-    --property volume_driver= {{ .driver }} \
-      volume_backend_name= {{ .name }} \
+    --property volume_driver={{ .driver }} \
+    --property volume_backend_name={{ .name }} \
 {{ .group }}
+{{ end }}
+
+{{ end }}
 
 exit 0
